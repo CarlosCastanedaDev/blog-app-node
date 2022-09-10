@@ -5,9 +5,11 @@ const ejs = require('ejs')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser') 
 const BlogPost = require('./models/BlogPost.js')
+const fileUpload = require('express-fileupload')
 
 app.use(bodyParser.json()) 
 app.use(bodyParser.urlencoded({extended:true}))
+app.use(fileUpload())
 
 mongoose.connect('mongodb://localhost/my_database', {useNewUrlParser: true})
 app.set('view engine', 'ejs')
@@ -44,8 +46,14 @@ app.get('/posts/new', (req,res) =>{
     res.render('create2')
 })
 
-app.post('/posts/store',async(req,res)=>{
-    // model creates a new doc with browser data 
-    await BlogPost.create(req.body,(error,blogpost) =>{
-    res.redirect('/') })
+app.post('/posts/store',(req,res)=>{
+    let image = req.files.image ;
+        image.mv(path.resolve(__dirname,'public/assets/img',image.name),
+            (error)=>{
+    BlogPost.create({
+    ...req.body ,
+     image: '/assets/img/' + image.name
     })
+    res.redirect('/') 
+    })
+})
