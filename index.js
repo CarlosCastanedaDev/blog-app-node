@@ -6,14 +6,27 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser') 
 const BlogPost = require('./models/BlogPost.js')
 const fileUpload = require('express-fileupload')
+const customMiddleWare = (req,res,next)=>{
+    console.log('Custom middle ware called')
+    next() 
+} 
+const validateMiddleWare = (req,res,next)=>{
+    if(req.files == null || req.body == null || req.title == null){ 
+        return res.redirect('/posts/new')
+    }
+    next() 
+}
 
-app.use(bodyParser.json()) 
-app.use(bodyParser.urlencoded({extended:true}))
-app.use(fileUpload())
 
 mongoose.connect('mongodb://localhost/my_database', {useNewUrlParser: true})
 app.set('view engine', 'ejs')
+
 app.use(express.static('public'))
+app.use(bodyParser.json()) 
+app.use(bodyParser.urlencoded({extended:true}))
+app.use(fileUpload())
+app.use(customMiddleWare)
+app.use('/posts/store',validateMiddleWare)
 
 app.listen(4000, () => {
     console.log('App listening on port 4000')
