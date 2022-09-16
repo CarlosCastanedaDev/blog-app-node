@@ -12,6 +12,7 @@ const validateMiddleWare = require('./middleware/validationMiddleware')
 const expressSession = require('express-session')
 const authMiddleware = require('./middleware/authMiddleware')
 const redirectIfAuthenticatedMiddleware = require('./middleware/redirectIfAuthenticatedMiddleware')
+const flash = require('connect-flash')
 
 mongoose.connect('mongodb://localhost/my_database', {useNewUrlParser: true})
 app.set('view engine', 'ejs')
@@ -33,6 +34,7 @@ app.use('*', (req,res, next) =>{
     loggedIn = req.session.userId
     next()
 })
+app.use(flash())
 
 app.listen(4000, () => {
     console.log('App listening on port 4000')
