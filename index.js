@@ -36,8 +36,13 @@ app.use('*', (req,res, next) =>{
 })
 app.use(flash())
 
-app.listen(4000, () => {
-    console.log('App listening on port:')
+let port = process.env.PORT;
+if (port == null || port == ''){
+    port = 4000;
+}
+
+app.listen(port, () => {
+    console.log('App listening...')
 })
 
 const newPostController = require('./controllers/newPost')
