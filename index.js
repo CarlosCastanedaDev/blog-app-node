@@ -10,7 +10,7 @@ const customMiddleWare = (req,res,next)=>{
     next() 
 } 
 const validateMiddleWare = require('./middleware/validationMiddleware')
-const expressSession = require('express-session')
+const expressSession = require('cookie-session')
 const authMiddleware = require('./middleware/authMiddleware')
 const redirectIfAuthenticatedMiddleware = require('./middleware/redirectIfAuthenticatedMiddleware')
 const flash = require('connect-flash')
