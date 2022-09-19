@@ -1,5 +1,6 @@
 const express = require('express')
 const app = new express()
+require('dotenv').config()
 const ejs = require('ejs')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser') 
@@ -13,8 +14,7 @@ const expressSession = require('express-session')
 const authMiddleware = require('./middleware/authMiddleware')
 const redirectIfAuthenticatedMiddleware = require('./middleware/redirectIfAuthenticatedMiddleware')
 const flash = require('connect-flash')
-
-mongoose.connect('mongodb://localhost/my_database', {useNewUrlParser: true})
+mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ulszy.mongodb.net/my_database`, {useNewUrlParser: true})
 app.set('view engine', 'ejs')
 
 global.loggedIn = null
@@ -37,7 +37,7 @@ app.use('*', (req,res, next) =>{
 app.use(flash())
 
 app.listen(4000, () => {
-    console.log('App listening on port 4000')
+    console.log('App listening on port:')
 })
 
 const newPostController = require('./controllers/newPost')
